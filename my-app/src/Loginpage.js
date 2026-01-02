@@ -137,9 +137,6 @@ const Login = ({ setUserRole }) => {
         <p className="signup-link">
           Don't have an account? <span onClick={() => navigate("/register")}>Sign Up</span>
         </p>
-        <p className="signup-link" style={{ marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
-          Need test credentials? <span onClick={() => navigate("/credentials")} style={{ color: '#22d3ee' }}>View Demo Accounts</span>
-        </p>
       </div>
     </div>
   );
