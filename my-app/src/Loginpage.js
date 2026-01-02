@@ -90,12 +90,6 @@ const Login = ({ setUserRole }) => {
   return (
     <div className="login-page">
       <button className="back-button" onClick={() => navigate("/")}>← Back</button>
-      <div 
-        className="demo-link-floating"
-        onClick={() => navigate("/credentials")}
-      >
-        <span>👉 Need test credentials? Click here! 👈</span>
-      </div>
       <div className="login-box">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}
@@ -137,6 +131,9 @@ const Login = ({ setUserRole }) => {
         <p className="signup-link">
           Don't have an account? <span onClick={() => navigate("/register")}>Sign Up</span>
         </p>
+        <div className="credentials-highlight" onClick={() => navigate("/credentials")}>
+          <span>👉 Need test credentials? Click here! 👈</span>
+        </div>
       </div>
     </div>
   );

@@ -48,37 +48,34 @@ html, body {
   max-width: 90%;
 }
 
-/* Floating Demo Link */
-.demo-link-floating {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 999;
-  padding: 10px 16px;
+/* Credentials Highlight - inside login form */
+.credentials-highlight {
+  margin-top: 14px;
+  padding: 10px 14px;
   background: linear-gradient(135deg, #22d3ee, #06b6d4);
   color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 700;
-  font-size: 11px;
-  box-shadow: 0 6px 12px rgba(34, 211, 238, 0.4);
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 0 4px 10px rgba(34, 211, 238, 0.5);
   transition: all 0.3s ease;
-  border: 2px solid #00d9ff;
-  animation: floatingPulse 2s ease-in-out infinite;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: credentialsPulse 2.5s ease-in-out infinite;
+  text-align: center;
 }
 
-.demo-link-floating:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(34, 211, 238, 0.6);
-  border-color: #22d3ee;
+.credentials-highlight:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(34, 211, 238, 0.7);
 }
 
-@keyframes floatingPulse {
+@keyframes credentialsPulse {
   0%, 100% {
-    box-shadow: 0 6px 12px rgba(34, 211, 238, 0.4);
+    box-shadow: 0 4px 10px rgba(34, 211, 238, 0.5);
   }
   50% {
-    box-shadow: 0 10px 20px rgba(34, 211, 238, 0.8);
+    box-shadow: 0 6px 18px rgba(34, 211, 238, 0.8);
   }
 }
 
