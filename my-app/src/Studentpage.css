@@ -7,62 +7,39 @@
 }
 
 :root {
-  --primary-color: 
-#4361ee;
-  --primary-dark: 
-#3a56d4;
-  --primary-light: 
-#5e7bff;
-  --secondary-color: 
-#7209b7;
-  --accent-color: 
-#4cc9f0;
-  --success-color: 
-#2ecc71;
-  --warning-color: 
-#f39c12;
-  --danger-color: 
-#e74c3c;
-  --info-color: 
-#3498db;
+  --primary-color: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #60a5fa;
+  --secondary-color: #22d3ee;
+  --accent-color: #22d3ee;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --info-color: #0ea5e9;
 
-  --dark-bg: 
-#121212;
-  --dark-surface: 
-#1e1e1e;
-  --dark-surface-2: 
-#2d2d2d;
-  --dark-text: 
-#f8f9fa;
-  --dark-text-secondary: 
-#b0b0b0;
-  --dark-border: 
-#3d3d3d;
-  --dark-hover: 
-#3a3a3a;
+  --dark-bg: #0b1220;
+  --dark-surface: #0f172a;
+  --dark-surface-2: #111827;
+  --dark-text: #e2e8f0;
+  --dark-text-secondary: #94a3b8;
+  --dark-border: #1f2937;
+  --dark-hover: #111827;
 
-  --light-bg: 
-#f8f9fa;
-  --light-surface: 
-#ffffff;
-  --light-surface-2: 
-#f0f0f0;
-  --light-text: 
-#333333;
-  --light-text-secondary: 
-#6c757d;
-  --light-border: 
-#e0e0e0;
-  --light-hover: 
-#f5f5f5;
+  --light-bg: #f4f6fb;
+  --light-surface: #ffffff;
+  --light-surface-2: #eef2ff;
+  --light-text: #0f172a;
+  --light-text-secondary: #475569;
+  --light-border: #e2e8f0;
+  --light-hover: #f5f7fb;
 
-  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 2px 5px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.12);
+  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.16);
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --radius-full: 9999px;
 
   --sidebar-width: 250px;
@@ -770,7 +747,6 @@ a {
   box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
   cursor: pointer;
   position: relative;
-  overflow: hidden;
   transition: transform 0.2s ease;
 }
 
@@ -820,7 +796,6 @@ a {
   position: relative;
   height: 1.5rem;
   width: 100%;
-  display: flex;
   align-items: center;
   animation: scrollNotice 30s linear infinite; /* Slowed down the scroll speed */
 }

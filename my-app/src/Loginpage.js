@@ -29,15 +29,16 @@ const Login = ({ setUserRole }) => {
     try {
       const payload = { password, role };
       
-      // Only include email or registration number if provided
       if (email) payload.email = email;
       if (registrationNumber) payload.registrationNumber = registrationNumber;
 
       const res = await axios.post("http://localhost:5000/login", payload);
 
-      // Store auth data
+      // Store auth data including org info
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("org", JSON.stringify(res.data.org));
+      localStorage.setItem("orgCode", res.data.org.orgCode);
       
       // Update app state
       if (setUserRole) {
@@ -48,6 +49,9 @@ const Login = ({ setUserRole }) => {
       switch (res.data.user.role) {
         case "admin":
           navigate("/admin", { replace: true });
+          break;
+        case "teacher":
+          navigate("/teacher", { replace: true });
           break;
         case "student":
           navigate("/student", { replace: true });
@@ -104,8 +108,7 @@ const Login = ({ setUserRole }) => {
           </div>
           <select value={role} onChange={(e) => setRole(e.target.value.toLowerCase())}>
             <option value="student">Student</option>
-            <option value="faculty">Faculty</option>
-            <option value="librarian">Librarian</option>
+            <option value="teacher">Teacher</option>
             <option value="admin">Admin</option>
           </select>
           <button type="submit" disabled={loading}>
@@ -114,6 +117,9 @@ const Login = ({ setUserRole }) => {
         </form>
         <p className="signup-link">
           Don't have an account? <span onClick={() => navigate("/register")}>Sign Up</span>
+        </p>
+        <p className="signup-link" style={{ marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
+          Need test credentials? <span onClick={() => navigate("/credentials")} style={{ color: '#22d3ee' }}>View Demo Accounts</span>
         </p>
       </div>
     </div>

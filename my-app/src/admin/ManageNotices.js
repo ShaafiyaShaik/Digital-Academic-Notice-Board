@@ -13,6 +13,12 @@ const ManageNotices = ({ notices, fetchNotices, darkMode }) => {
   const [date, setDate] = useState("");
   const [urgent, setUrgent] = useState(false);
   const [file, setFile] = useState(null);
+  
+  // Read stats modal state
+  const [showReadStats, setShowReadStats] = useState(false);
+  const [readStatsData, setReadStatsData] = useState(null);
+  const [loadingStats, setLoadingStats] = useState(false);
+  const [statsView, setStatsView] = useState("readers"); // "readers" or "non-readers"
 
   const handleEdit = (notice) => {
     setEditingId(notice._id);
@@ -85,6 +91,34 @@ const ManageNotices = ({ notices, fetchNotices, darkMode }) => {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+  };
+  
+  // Fetch read statistics for a notice
+  const fetchReadStats = async (noticeId) => {
+    setLoadingStats(true);
+    setShowReadStats(true);
+    setStatsView("readers");
+    
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/notices/${noticeId}/read-stats`,
+        {
+          headers: { Authorization: localStorage.getItem("token") }
+        }
+      );
+      setReadStatsData(response.data);
+    } catch (error) {
+      console.error("Error fetching read stats:", error);
+      alert("Failed to fetch read statistics.");
+      setShowReadStats(false);
+    } finally {
+      setLoadingStats(false);
+    }
+  };
+  
+  const closeReadStats = () => {
+    setShowReadStats(false);
+    setReadStatsData(null);
   };
 
   // Apply filters and sorting
@@ -434,6 +468,20 @@ const ManageNotices = ({ notices, fetchNotices, darkMode }) => {
                   ✏️ Edit
                 </button>
                 <button 
+                  onClick={() => fetchReadStats(notice._id)}
+                  style={{ 
+                    flex: "1",
+                    padding: "8px", 
+                    background: "#28a745", 
+                    color: "#fff", 
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                >
+                  👁️ Reads
+                </button>
+                <button 
                   onClick={() => handleDelete(notice._id)}
                   style={{ 
                     flex: "1",
@@ -450,6 +498,250 @@ const ManageNotices = ({ notices, fetchNotices, darkMode }) => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+      
+      {/* Read Statistics Modal */}
+      {showReadStats && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0,0,0,0.7)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 9999,
+          padding: "20px"
+        }}>
+          <div style={{
+            background: darkMode ? "#2a2a2a" : "#fff",
+            borderRadius: "12px",
+            width: "100%",
+            maxWidth: "800px",
+            maxHeight: "90vh",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column"
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              padding: "20px",
+              borderBottom: `1px solid ${darkMode ? "#444" : "#ddd"}`
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h3 style={{ margin: 0 }}>
+                  {loadingStats ? "Loading..." : `Read Statistics: ${readStatsData?.noticeTitle}`}
+                </h3>
+                <button 
+                  onClick={closeReadStats}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    fontSize: "24px",
+                    cursor: "pointer",
+                    color: darkMode ? "#fff" : "#000"
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+              
+              {!loadingStats && readStatsData && (
+                <div style={{ marginTop: "15px", display: "flex", gap: "15px" }}>
+                  <div style={{
+                    padding: "10px 15px",
+                    background: "#28a745",
+                    color: "#fff",
+                    borderRadius: "6px",
+                    flex: 1,
+                    textAlign: "center"
+                  }}>
+                    <div style={{ fontSize: "24px", fontWeight: "bold" }}>
+                      {readStatsData.readCount}
+                    </div>
+                    <div style={{ fontSize: "14px" }}>Read</div>
+                  </div>
+                  <div style={{
+                    padding: "10px 15px",
+                    background: "#dc3545",
+                    color: "#fff",
+                    borderRadius: "6px",
+                    flex: 1,
+                    textAlign: "center"
+                  }}>
+                    <div style={{ fontSize: "24px", fontWeight: "bold" }}>
+                      {readStatsData.unreadCount}
+                    </div>
+                    <div style={{ fontSize: "14px" }}>Not Read</div>
+                  </div>
+                  <div style={{
+                    padding: "10px 15px",
+                    background: "#007bff",
+                    color: "#fff",
+                    borderRadius: "6px",
+                    flex: 1,
+                    textAlign: "center"
+                  }}>
+                    <div style={{ fontSize: "24px", fontWeight: "bold" }}>
+                      {readStatsData.totalUsers}
+                    </div>
+                    <div style={{ fontSize: "14px" }}>Total Users</div>
+                  </div>
+                </div>
+              )}
+              
+              {!loadingStats && readStatsData && (
+                <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
+                  <button
+                    onClick={() => setStatsView("readers")}
+                    style={{
+                      flex: 1,
+                      padding: "10px",
+                      background: statsView === "readers" ? "#007bff" : (darkMode ? "#444" : "#f0f0f0"),
+                      color: statsView === "readers" ? "#fff" : (darkMode ? "#fff" : "#000"),
+                      border: "none",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontWeight: statsView === "readers" ? "bold" : "normal"
+                    }}
+                  >
+                    ✅ Who Read ({readStatsData.readCount})
+                  </button>
+                  <button
+                    onClick={() => setStatsView("non-readers")}
+                    style={{
+                      flex: 1,
+                      padding: "10px",
+                      background: statsView === "non-readers" ? "#007bff" : (darkMode ? "#444" : "#f0f0f0"),
+                      color: statsView === "non-readers" ? "#fff" : (darkMode ? "#fff" : "#000"),
+                      border: "none",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontWeight: statsView === "non-readers" ? "bold" : "normal"
+                    }}
+                  >
+                    ❌ Who Didn't Read ({readStatsData.unreadCount})
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {/* Modal Body */}
+            <div style={{
+              padding: "20px",
+              overflowY: "auto",
+              flex: 1
+            }}>
+              {loadingStats ? (
+                <div style={{ textAlign: "center", padding: "40px" }}>
+                  Loading statistics...
+                </div>
+              ) : readStatsData && (
+                <div>
+                  {statsView === "readers" ? (
+                    readStatsData.readers.length === 0 ? (
+                      <div style={{ textAlign: "center", padding: "40px", color: darkMode ? "#aaa" : "#666" }}>
+                        No one has read this notice yet.
+                      </div>
+                    ) : (
+                      <table style={{
+                        width: "100%",
+                        borderCollapse: "collapse"
+                      }}>
+                        <thead>
+                          <tr style={{
+                            background: darkMode ? "#333" : "#f5f5f5",
+                            borderBottom: `2px solid ${darkMode ? "#444" : "#ddd"}`
+                          }}>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Name</th>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Email</th>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Role</th>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Reg No</th>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Read At</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {readStatsData.readers.map((reader, index) => (
+                            <tr key={reader.userId} style={{
+                              borderBottom: `1px solid ${darkMode ? "#444" : "#eee"}`,
+                              background: index % 2 === 0 ? (darkMode ? "#2a2a2a" : "#fff") : (darkMode ? "#333" : "#f9f9f9")
+                            }}>
+                              <td style={{ padding: "12px" }}>{reader.name}</td>
+                              <td style={{ padding: "12px", fontSize: "14px" }}>{reader.email}</td>
+                              <td style={{ padding: "12px" }}>
+                                <span style={{
+                                  padding: "3px 8px",
+                                  background: "#007bff",
+                                  color: "#fff",
+                                  borderRadius: "4px",
+                                  fontSize: "12px"
+                                }}>
+                                  {reader.role}
+                                </span>
+                              </td>
+                              <td style={{ padding: "12px" }}>{reader.registrationNumber || "N/A"}</td>
+                              <td style={{ padding: "12px", fontSize: "14px" }}>
+                                {new Date(reader.readAt).toLocaleString()}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )
+                  ) : (
+                    readStatsData.nonReaders.length === 0 ? (
+                      <div style={{ textAlign: "center", padding: "40px", color: darkMode ? "#aaa" : "#666" }}>
+                        Everyone has read this notice! 🎉
+                      </div>
+                    ) : (
+                      <table style={{
+                        width: "100%",
+                        borderCollapse: "collapse"
+                      }}>
+                        <thead>
+                          <tr style={{
+                            background: darkMode ? "#333" : "#f5f5f5",
+                            borderBottom: `2px solid ${darkMode ? "#444" : "#ddd"}`
+                          }}>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Name</th>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Email</th>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Role</th>
+                            <th style={{ padding: "12px", textAlign: "left" }}>Reg No</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {readStatsData.nonReaders.map((user, index) => (
+                            <tr key={user.userId} style={{
+                              borderBottom: `1px solid ${darkMode ? "#444" : "#eee"}`,
+                              background: index % 2 === 0 ? (darkMode ? "#2a2a2a" : "#fff") : (darkMode ? "#333" : "#f9f9f9")
+                            }}>
+                              <td style={{ padding: "12px" }}>{user.name}</td>
+                              <td style={{ padding: "12px", fontSize: "14px" }}>{user.email}</td>
+                              <td style={{ padding: "12px" }}>
+                                <span style={{
+                                  padding: "3px 8px",
+                                  background: "#6c757d",
+                                  color: "#fff",
+                                  borderRadius: "4px",
+                                  fontSize: "12px"
+                                }}>
+                                  {user.role}
+                                </span>
+                              </td>
+                              <td style={{ padding: "12px" }}>{user.registrationNumber || "N/A"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -126,7 +126,30 @@ a {
   position: relative;
   overflow: hidden;
   display: inline-block;
-  z-index: 1;
+  z-index: 100;
+  pointer-events: auto;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  background: linear-gradient(45deg, #6e72fc, #ad1deb);
+}
+
+.login-btn {
+  background: linear-gradient(45deg, #6e72fc, #ad1deb);
+}
+
+.signup-btn {
+  background: linear-gradient(45deg, #ff9966, #ff5e62);
+}
+
+.get-started-btn {
+  background: linear-gradient(135deg, #6366f1, #22d3ee);
+  padding: 1rem 2rem;
+  font-size: 1rem;
+}
+
+.cosmic-btn:active {
+  transform: translateY(-1px);
 }
 
 .cosmic-btn::before {
@@ -136,17 +159,13 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, #6e72fc, #ad1deb);
-  z-index: -1;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 0;
   transition: all 0.4s ease;
 }
 
-.login-btn::before {
-  opacity: 0.8;
-}
-
-.signup-btn::before {
-  background: linear-gradient(45deg, #ff9966, #ff5e62);
+.cosmic-btn:hover::before {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .cosmic-btn:hover {
@@ -389,6 +408,13 @@ a {
   gap: 1.5rem;
   animation-delay: calc(var(--i) * 0.1s);
   cursor: pointer;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
 .page-card:nth-child(1) {

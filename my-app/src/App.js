@@ -5,6 +5,10 @@ import Register from "./Registerpage";
 import Homepage from "./Home";
 import AdminApp from "./AdminApp";
 import Student from "./Studentpage";
+import TeacherDashboard from "./TeacherDashboard";
+import AccountDetails from "./AccountDetails";
+import Credentials from "./Credentials";
+import "./App.css";
 
 // Protected route wrapper component that handles navigation
 const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
@@ -15,24 +19,20 @@ const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Check authentication status
-    const checkAuth = () => {
-      const token = localStorage.getItem("token");
-      const user = JSON.parse(localStorage.getItem("user"));
-      
-      if (!token || !user) {
-        setIsAuthenticated(false);
-        setUserRole(null);
-        return;
-      }
-      
+    // Check authentication status only on mount
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if (!token || !user) {
+      setIsAuthenticated(false);
+      setUserRole(null);
+    } else {
       setIsAuthenticated(true);
       setUserRole(user.role);
-    };
+    }
     
-    checkAuth();
     setLoading(false);
-  }, [location.pathname]);
+  }, []); // Empty dependency array - only run once on mount
   
   // Handle logout
   const handleLogout = () => {
@@ -79,6 +79,16 @@ const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
 const App = () => {
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body.classList.remove("dark-mode", "light-theme");
+    if (theme === "light") {
+      document.body.classList.add("light-theme");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     // Check if user is logged in
@@ -89,9 +99,26 @@ const App = () => {
     setLoading(false);
   }, []);
 
+  // Add a logout route to test
+  useEffect(() => {
+    // Check if there's a logout param in URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("logout") === "true") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUserRole(null);
+      window.location.href = "/";
+    }
+  }, []);
+
   // Main app handler for login
   const handleLogin = (role) => {
+    console.log("handleLogin called with role:", role);
     setUserRole(role);
+  };
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   if (loading) {
@@ -100,72 +127,106 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={
-          userRole ? (
-            userRole === "admin" ? <Navigate to="/admin" replace /> :
-            userRole === "student" ? <Navigate to="/student" replace /> :
-            userRole === "faculty" ? <Navigate to="/faculty" replace /> :
-            userRole === "librarian" ? <Navigate to="/librarian" replace /> :
-            <Homepage />
-          ) : (
-            <Homepage />
-          )
-        } />
-        
-        <Route path="/login" element={
-          userRole ? (
-            userRole === "admin" ? <Navigate to="/admin" replace /> :
-            userRole === "student" ? <Navigate to="/student" replace /> :
-            userRole === "faculty" ? <Navigate to="/faculty" replace /> :
-            userRole === "librarian" ? <Navigate to="/librarian" replace /> :
-            <Navigate to="/" replace />
-          ) : (
-            <Login setUserRole={handleLogin} />
-          )
-        } />
-        
-        <Route path="/register" element={
-          userRole ? (
-            userRole === "admin" ? <Navigate to="/admin" replace /> :
-            userRole === "student" ? <Navigate to="/student" replace /> :
-            userRole === "faculty" ? <Navigate to="/faculty" replace /> :
-            userRole === "librarian" ? <Navigate to="/librarian" replace /> :
-            <Navigate to="/" replace />
-          ) : (
-            <Register />
-          )
-        } />
-        
-        {/* Protected routes */}
-        <Route path="/admin/*" element={
-          <ProtectedRouteWrapper allowedRoles={["admin"]}>
-            <AdminApp />
-          </ProtectedRouteWrapper>
-        } />
-        
-        <Route path="/student/*" element={
-          <ProtectedRouteWrapper allowedRoles={["student"]}>
-            <Student />
-          </ProtectedRouteWrapper>
-        } />
-        
-        <Route path="/faculty/*" element={
-          <ProtectedRouteWrapper allowedRoles={["faculty"]}>
-            <div>Faculty Dashboard</div>
-          </ProtectedRouteWrapper>
-        } />
-        
-        <Route path="/librarian/*" element={
-          <ProtectedRouteWrapper allowedRoles={["librarian"]}>
-            <div>Librarian Dashboard</div>
-          </ProtectedRouteWrapper>
-        } />
-        
-        {/* Fallback route */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div className="theme-toggle" onClick={toggleTheme}>
+        <span role="img" aria-label="theme">
+          {theme === "dark" ? "🌙" : "☀️"}
+        </span>
+        <span className="pill-text">{theme === "dark" ? "Dark" : "Light"}</span>
+      </div>
+      <div className="app-shell">
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={
+            userRole ? (
+              userRole === "admin" ? <Navigate to="/admin" replace /> :
+              userRole === "student" ? <Navigate to="/student" replace /> :
+              userRole === "faculty" ? <Navigate to="/faculty" replace /> :
+              userRole === "librarian" ? <Navigate to="/librarian" replace /> :
+              <Homepage />
+            ) : (
+              <Homepage />
+            )
+          } />
+          
+          <Route path="/login" element={
+            (() => {
+              console.log("Login route matched. userRole:", userRole);
+              if (userRole) {
+                console.log("User has role, redirecting:", userRole);
+                if (userRole === "admin") return <Navigate to="/admin" replace />;
+                if (userRole === "student") return <Navigate to="/student" replace />;
+                if (userRole === "faculty") return <Navigate to="/faculty" replace />;
+                if (userRole === "librarian") return <Navigate to="/librarian" replace />;
+                return <Navigate to="/" replace />;
+              } else {
+                console.log("No user role, showing Login component");
+                return <Login setUserRole={handleLogin} />;
+              }
+            })()
+          } />
+          
+          <Route path="/register" element={
+            userRole ? (
+              userRole === "admin" ? <Navigate to="/admin" replace /> :
+              userRole === "student" ? <Navigate to="/student" replace /> :
+              userRole === "faculty" ? <Navigate to="/faculty" replace /> :
+              userRole === "librarian" ? <Navigate to="/librarian" replace /> :
+              <Navigate to="/" replace />
+            ) : (
+              <Register />
+            )
+          } />
+          
+          <Route path="/credentials" element={<Credentials />} />
+          
+          {/* Protected routes */}
+          <Route path="/admin/*" element={
+            <ProtectedRouteWrapper allowedRoles={["admin"]}>
+              <AdminApp />
+            </ProtectedRouteWrapper>
+          } />
+          
+          <Route path="/student/*" element={
+            <ProtectedRouteWrapper allowedRoles={["student"]}>
+              <Student />
+            </ProtectedRouteWrapper>
+          } />
+          
+          <Route path="/teacher" element={
+            <ProtectedRouteWrapper allowedRoles={["teacher"]}>
+              <TeacherDashboard />
+            </ProtectedRouteWrapper>
+          } />
+          
+          <Route path="/teacher/*" element={
+            <ProtectedRouteWrapper allowedRoles={["teacher"]}>
+              <TeacherDashboard />
+            </ProtectedRouteWrapper>
+          } />
+          
+          <Route path="/faculty/*" element={
+            <ProtectedRouteWrapper allowedRoles={["faculty"]}>
+              <div>Faculty Dashboard</div>
+            </ProtectedRouteWrapper>
+          } />
+          
+          <Route path="/librarian/*" element={
+            <ProtectedRouteWrapper allowedRoles={["librarian"]}>
+              <div>Librarian Dashboard</div>
+            </ProtectedRouteWrapper>
+          } />
+          
+          {/* Account Details - accessible to all authenticated users */}
+          <Route path="/account" element={
+            <ProtectedRouteWrapper allowedRoles={["admin", "student", "teacher", "faculty", "librarian"]}>
+              <AccountDetails />
+            </ProtectedRouteWrapper>
+          } />
+          
+          {/* Fallback route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </Router>
   );
 };
