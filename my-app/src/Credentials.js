@@ -89,27 +89,27 @@ const Credentials = () => {
   return (
     <div className="login-page">
       <button className="back-button" onClick={() => navigate("/login")}>← Back to Login</button>
-      <div className="login-box" style={{ maxWidth: '900px', padding: '32px' }}>
-        <h2 style={{ marginBottom: '24px', textAlign: 'center' }}>🔐 Test Credentials</h2>
+      <div className="login-box" style={{ maxWidth: '1100px', padding: '24px', width: '95%' }}>
+        <h2 style={{ marginBottom: '20px', textAlign: 'center', fontSize: '20px' }}>🔐 Test Credentials</h2>
         
         {/* Organizations Section */}
-        <div style={{ marginBottom: '32px' }}>
-          <h3 style={{ color: '#6366f1', marginBottom: '16px', fontSize: '20px' }}>📋 Organizations</h3>
+        <div style={{ marginBottom: '24px' }}>
+          <h3 style={{ color: '#6366f1', marginBottom: '12px', fontSize: '16px' }}>📋 Organizations</h3>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ background: 'rgba(99, 102, 241, 0.1)', borderBottom: '2px solid #6366f1' }}>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Org Code</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Name</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Address</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Org Code</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Name</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Address</th>
                 </tr>
               </thead>
               <tbody>
                 {organizations.map((org, index) => (
                   <tr key={index} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <td style={{ padding: '12px', fontWeight: 'bold', color: '#22d3ee' }}>{org.code}</td>
-                    <td style={{ padding: '12px' }}>{org.name}</td>
-                    <td style={{ padding: '12px', color: '#94a3b8' }}>{org.address}</td>
+                    <td style={{ padding: '10px', fontWeight: 'bold', color: '#22d3ee' }}>{org.code}</td>
+                    <td style={{ padding: '10px' }}>{org.name}</td>
+                    <td style={{ padding: '10px', color: '#94a3b8' }}>{org.address}</td>
                   </tr>
                 ))}
               </tbody>
@@ -119,31 +119,31 @@ const Credentials = () => {
 
         {/* Users Section */}
         <div>
-          <h3 style={{ color: '#6366f1', marginBottom: '16px', fontSize: '20px' }}>👥 Users</h3>
+          <h3 style={{ color: '#6366f1', marginBottom: '12px', fontSize: '16px' }}>👥 Users</h3>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
               <thead>
                 <tr style={{ background: 'rgba(99, 102, 241, 0.1)', borderBottom: '2px solid #6366f1' }}>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Name</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Email</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Password</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Role</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Reg #</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Organization</th>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Action</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Name</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Email</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Password</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Role</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Reg #</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Organization</th>
+                  <th style={{ padding: '10px', textAlign: 'left', color: '#6366f1' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((user, index) => (
                   <tr key={index} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <td style={{ padding: '12px' }}>{user.name}</td>
-                    <td style={{ padding: '12px', color: '#22d3ee' }}>{user.email}</td>
-                    <td style={{ padding: '12px', fontWeight: 'bold', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)' }}>{user.password}</td>
-                    <td style={{ padding: '12px' }}>
+                    <td style={{ padding: '10px' }}>{user.name}</td>
+                    <td style={{ padding: '10px', color: '#22d3ee' }}>{user.email}</td>
+                    <td style={{ padding: '10px', fontWeight: 'bold', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)' }}>{user.password}</td>
+                    <td style={{ padding: '10px' }}>
                       <span style={{
-                        padding: '4px 8px',
-                        borderRadius: '6px',
-                        fontSize: '12px',
+                        padding: '3px 7px',
+                        borderRadius: '5px',
+                        fontSize: '11px',
                         fontWeight: '600',
                         background: user.role === 'admin' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(99, 102, 241, 0.2)',
                         color: user.role === 'admin' ? '#ef4444' : '#6366f1'
@@ -151,19 +151,19 @@ const Credentials = () => {
                         {user.role.toUpperCase()}
                       </span>
                     </td>
-                    <td style={{ padding: '12px', color: '#94a3b8' }}>{user.regNumber}</td>
-                    <td style={{ padding: '12px', fontSize: '12px', color: '#64748b' }}>{user.org}</td>
-                    <td style={{ padding: '12px' }}>
+                    <td style={{ padding: '10px', color: '#94a3b8' }}>{user.regNumber}</td>
+                    <td style={{ padding: '10px', fontSize: '11px', color: '#64748b' }}>{user.org}</td>
+                    <td style={{ padding: '10px' }}>
                       <button
                         onClick={() => handleUseCredential(user.email, user.password, user.role)}
                         style={{
-                          padding: '6px 12px',
+                          padding: '5px 10px',
                           background: '#10b981',
                           color: 'white',
                           border: 'none',
-                          borderRadius: '6px',
+                          borderRadius: '5px',
                           cursor: 'pointer',
-                          fontSize: '12px',
+                          fontSize: '11px',
                           fontWeight: '600',
                           transition: 'all 0.3s ease'
                         }}
@@ -180,9 +180,9 @@ const Credentials = () => {
           </div>
         </div>
 
-        <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(34, 211, 238, 0.1)', borderRadius: '12px', border: '1px solid #22d3ee' }}>
-          <p style={{ margin: 0, color: '#22d3ee', fontSize: '14px' }}>
-            💡 <strong>Tip:</strong> Use any email + password + role combination above to test the application.
+        <div style={{ marginTop: '20px', padding: '12px', background: 'rgba(34, 211, 238, 0.1)', borderRadius: '10px', border: '1px solid #22d3ee' }}>
+          <p style={{ margin: 0, color: '#22d3ee', fontSize: '12px' }}>
+            💡 <strong>Tip:</strong> Click "Use" button to auto-fill login credentials.
           </p>
         </div>
       </div>
