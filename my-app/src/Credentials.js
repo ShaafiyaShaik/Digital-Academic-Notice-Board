@@ -5,6 +5,13 @@ import "./Loginpage.css";
 const Credentials = () => {
   const navigate = useNavigate();
 
+  const handleUseCredential = (email, password, role) => {
+    sessionStorage.setItem("tempEmail", email);
+    sessionStorage.setItem("tempPassword", password);
+    sessionStorage.setItem("tempRole", role);
+    navigate("/login");
+  };
+
   const organizations = [
     { code: "LEGACY001", name: "Legacy College", address: "Default Organization" },
     { code: "VFSTR1", name: "VFSTR College", address: "Hyderabad, India" },
@@ -123,6 +130,7 @@ const Credentials = () => {
                   <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Role</th>
                   <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Reg #</th>
                   <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Organization</th>
+                  <th style={{ padding: '12px', textAlign: 'left', color: '#6366f1' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -145,6 +153,26 @@ const Credentials = () => {
                     </td>
                     <td style={{ padding: '12px', color: '#94a3b8' }}>{user.regNumber}</td>
                     <td style={{ padding: '12px', fontSize: '12px', color: '#64748b' }}>{user.org}</td>
+                    <td style={{ padding: '12px' }}>
+                      <button
+                        onClick={() => handleUseCredential(user.email, user.password, user.role)}
+                        style={{
+                          padding: '6px 12px',
+                          background: '#10b981',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => e.target.style.background = '#059669'}
+                        onMouseOut={(e) => e.target.style.background = '#10b981'}
+                      >
+                        Use
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

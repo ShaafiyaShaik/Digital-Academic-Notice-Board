@@ -14,6 +14,19 @@ const Login = ({ setUserRole }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const tempEmail = sessionStorage.getItem("tempEmail");
+    const tempPassword = sessionStorage.getItem("tempPassword");
+    const tempRole = sessionStorage.getItem("tempRole");
+    
+    if (tempEmail) {
+      setEmail(tempEmail);
+      setPassword(tempPassword);
+      setRole(tempRole);
+      sessionStorage.clear();
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -77,6 +90,12 @@ const Login = ({ setUserRole }) => {
   return (
     <div className="login-page">
       <button className="back-button" onClick={() => navigate("/")}>← Back</button>
+      <div 
+        className="demo-link-floating"
+        onClick={() => navigate("/credentials")}
+      >
+        <span>👉 Need test credentials? Click here! 👈</span>
+      </div>
       <div className="login-box">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}
