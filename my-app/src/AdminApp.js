@@ -10,6 +10,7 @@ import Settings from "./admin/Settings";
 import axios from "axios";
 import { FaHome, FaTasks, FaPlus, FaCog, FaUserCircle, FaSignOutAlt, FaUniversity, FaUsers } from "react-icons/fa";
 import "./CosmicTheme.css";
+import API_URL from "./config";
 
 const AdminApp = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -26,7 +27,7 @@ const AdminApp = () => {
 
   const fetchNotices = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/notices");
+      const response = await axios.get(`${API_URL}/notices`);
       setNotices(response.data);
     } catch (error) {
       console.error("Error fetching notices:", error);
@@ -36,7 +37,7 @@ const AdminApp = () => {
   const fetchPermissions = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/admin/permissions", {
+      const response = await axios.get(`${API_URL}/api/admin/permissions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setPermissions(response.data);

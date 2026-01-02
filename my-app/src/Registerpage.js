@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Registerpage.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import API_URL from "./config";
 
 const Register = () => {
   const [registrationNumber, setRegistrationNumber] = useState("");
@@ -40,7 +41,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/register", {
+      const response = await axios.post(`${API_URL}/register`, {
         registrationNumber,
         name,
         email,

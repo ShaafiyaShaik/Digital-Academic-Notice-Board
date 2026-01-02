@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Loginpage.css";
+import API_URL from "./config";
 
 const Login = ({ setUserRole }) => {
   const [registrationNumber, setRegistrationNumber] = useState("");
@@ -45,7 +46,7 @@ const Login = ({ setUserRole }) => {
       if (email) payload.email = email;
       if (registrationNumber) payload.registrationNumber = registrationNumber;
 
-      const res = await axios.post("http://localhost:5000/login", payload);
+      const res = await axios.post(`${API_URL}/login`, payload);
 
       // Store auth data including org info
       localStorage.setItem("token", res.data.token);
